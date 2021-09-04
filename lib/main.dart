@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/view/sign_in.dart';
+import 'package:newsapp/view/middle_page.dart';
 
 
 void main(){
@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
         accentColor: Colors.blueAccent,
         primaryColor: Colors.blueAccent,
       ),
-      home: SignIn(),
+      home: MiddlePage(),
     );
   }
 }

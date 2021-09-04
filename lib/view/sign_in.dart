@@ -26,24 +26,6 @@ class _SignInState extends State<SignIn> {
 
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkLogin();
-  }
-
-  void checkLogin()async{
-    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // String? val = await sharedPreferences.getString("login");
-    FlutterSecureStorage flutterSecureStorage = await FlutterSecureStorage();
-    String? val = await flutterSecureStorage.read(key: "login");
-    if(val!=null){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>DashBoard()), (route) => false);
-    }
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -149,7 +131,7 @@ class _SignInState extends State<SignIn> {
   }
 
   void login(BuildContext context)async{
-    if(!_password.isEmpty && !_email.isEmpty){
+    if(_password.isNotEmpty && _email.isNotEmpty){
        var url = Uri.parse("https://newsmods.com/api/login");
         Map body = {"email": _email,"password": _password};
       var response = await http.post(url, body: body,headers: {"accept":"application/json"});
@@ -158,7 +140,7 @@ class _SignInState extends State<SignIn> {
         pageRoute(body["token"],context);
        
       }else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Wrong Email and password")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid User")));
       }
     }else{
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Blank field are not allowed")));

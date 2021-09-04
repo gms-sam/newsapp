@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsapp/model/categories.dart';
 import 'package:newsapp/model/news_model.dart';
@@ -23,18 +24,27 @@ class HomeController extends GetxController {
           prevPageUrl: "",
           nextPageUrl: '')
       .obs;
+
+  RxList<int> categories=<int>[].obs;
   void getCatogoriesList() async {
     categoriesList.value = (await ApiManager().getCategoryList())!;
-    getNewsList();
+   await getNewsList();
+   categories.value=newsData.value.data.map((e) => e.categoryId).toSet().toList();
   }
 
+  String getCategoryName({required int categoryId}){
+    return categoriesList.value.data.firstWhere((element) => element.id==categoryId).name;
+  }
+  
   List<Data> getData(int categoryId) {
     return newsData.value.data.where((element) => element.categoryId==categoryId).toList();
   }
 
-  void getNewsList() async {
+  Future<void> getNewsList() async {
     newsData.value = (await ApiManager().getNews());
   }
+
+  
 
   @override
   void onInit() {

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:newsapp/controller/home_page.dart';
-import 'package:newsapp/model/categories.dart';
-import 'package:newsapp/model/news_model.dart';
-import 'package:newsapp/services/api_manager.dart';
-import 'package:newsapp/view/sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'news_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,27 +28,87 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+  String getCategoryName(int categoryId){
+     switch (categoryId) {
+      case 1:
+        return "Technology";     
+      case 2:
+        return "Bussiness";
+      case 3:
+        return "Entertainment";
+      case 4:
+        return "Genral";
+      case 5:
+        return "Health";
+      case 6:
+        return "Science";
+      case 7:
+        return "Sports";
+      default:
+        return "default";
+
+    }
+  }
+
   final HomeController homeController = Get.put(HomeController());
 
   List<Widget> getWidgets() {
+    var outPutFormate = DateFormat('dd/MMMM/yyyy hh:mm a');
+    final cat = homeController.categoriesList.value.data;
     if (homeController.newsData.value.to == -1) {
-      return homeController.categoriesList.value.data
+      return homeController.categories
           .map((data) => Center(
                 child: CircularProgressIndicator(),
               ))
           .toList();
-    } else {
+    } 
+
+    else {
       return homeController.categoriesList.value.data
-          .map((e) => Container(
-                child: ListView(
-                  children: homeController
-                      .getData(e.id)
-                      .map((e) => Container(
-                            child: Text(e.heading),
-                          ))
-                      .toList(),
+          .map((e) => ListView(
+            shrinkWrap: true,
+            children:
+            homeController
+                .getData(e.id)
+                .map((e) => ListTile(
+                horizontalTitleGap: 20,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NewsListDetails(dataList: e)));
+                },
+                leading: Container(
+                  height: 200,
+                  width: 100,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: e.image.isEmpty
+                          ? Image.network(
+                              "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png")
+                          : Image.network(
+                              e.image,
+                              fit: BoxFit.cover,
+                            )),
                 ),
-              ))
+                title: Text(e.heading),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(getCategoryName(e.categoryId)),
+                        Text(outPutFormate.format(DateTime.parse(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z").parse(e.updatedAt).toString())).toString()),
+                      ],
+                    ),
+                  ],
+                ),
+                    )).toList(),
+          ))
           .toList();
     }
   }
@@ -65,14 +122,15 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               )
             : DefaultTabController(
-                length: homeController.categoriesList.value!.data.length,
+                length: homeController.categoriesList.value.data.length,
                 child: Scaffold(
                   body: Container(
-                    height: MediaQuery.of(context).size.height,
+                   // height: MediaQuery.of(context).size.height,
                     margin: EdgeInsets.only(top: 20, left: 15, right: 10),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      //  mainAxisAlignment: MainAxisAlignment.center,
+        
                       children: [
                         Text(
                           "Browse",
@@ -90,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                             child: TabBar(
+                              isScrollable: true,
                           indicator: BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
                               color: Colors.blueAccent),
@@ -97,15 +156,21 @@ class _HomePageState extends State<HomePage> {
                           indicatorSize: TabBarIndicatorSize.label,
                           tabs: homeController.categoriesList.value.data
                               .map(
-                                (e) => Tab(
-                                  child: customTab(text: e.name),
+                                (e) => Container(
+                                  width: MediaQuery.of(context).size.width/4,
+                                  child: Tab(
+                                    child: customTab(text: e.name),
+                                  ),
                                 ),
                               )
                               .toList(),
                         )),
-                        SizedBox(
-                          height: 300,
-                          child: TabBarView(children: getWidgets()),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(top: 20),
+                           // height: MediaQuery.of(context).size.height,
+                            child: TabBarView(children: getWidgets()),
+                           ),
                         )
                       ],
                     ),
@@ -113,18 +178,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
       ),
-    );
-  }
-}
-
-class CategoryItemCard extends StatelessWidget {
-  final int id;
-  CategoryItemCard({required this.id});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [],
     );
   }
 }

@@ -30,12 +30,12 @@ class _DashBoardState extends State<DashBoard> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text(""),
+            label: "",
             backgroundColor: Colors.blue
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text(""),
+            label: "",
             backgroundColor: Colors.blue
           ),
         ],
