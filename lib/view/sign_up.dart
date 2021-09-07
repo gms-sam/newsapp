@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:newsapp/view/sign_in.dart';
+import 'package:http/http.dart'as http;
+
+import 'dashboard.dart';
 
 class SignUp extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -95,8 +102,9 @@ class SignUp extends StatelessWidget {
                       final formSate = _formKey.currentState;
                       if (formSate!.validate()) {
                         formSate.save();
+                        registerUser(context);
                         // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (context) => HomePage()));
+                        //     MaterialPageRoute(builder: (context) => SignIn()));
                       }
                     },
                   child: Container(
@@ -128,5 +136,40 @@ class SignUp extends StatelessWidget {
       ),
       
     );
+  }
+
+  Future registerUser(BuildContext context) async{
+    var url = Uri.parse("https://newsmods.com/api/register");
+    Map body={
+      "name":_userName,
+      "email":_email,
+      "password":_password,
+      "password_confirmation":_confrmPassword
+    };
+       var response = await http.post(url, body: body,headers: {"accept":"application/json"});
+       print(response.statusCode);
+       if(response.statusCode == 201){
+       //  print(response.body);
+        final body = jsonDecode(response.body);
+         print(body["token"]);
+        pageRoute(body["token"],context); 
+      }
+      else if(response.statusCode==422){
+         print(response.body);
+         final body = jsonDecode(response.body);
+         Map data = body["errors"];
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 20),
+            content: Text(data.values.toList()[0][0])));
+      }
+  }
+  void pageRoute(String token,BuildContext context)async{
+    //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //     await sharedPreferences.setString("login", token);
+
+    // FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
+    // flutterSecureStorage.write(key: "login", value: token);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>SignIn()), (route) => false);
   }
 }

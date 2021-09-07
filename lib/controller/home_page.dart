@@ -8,7 +8,7 @@ import 'package:newsapp/services/api_manager.dart';
 
 class HomeController extends GetxController {
   Rx<CategoriesList> categoriesList =
-      CategoriesList(data: [], currentPage: 0).obs;
+      CategoriesList(data: [], currentPage: -1).obs;
   Rx<NewsModel> newsData = NewsModel(
           path: "",
           data: [],

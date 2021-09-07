@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:newsapp/controller/home_page.dart';
+import 'package:newsapp/model/news_model.dart';
 import 'news_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> getWidgets() {
     var outPutFormate = DateFormat('dd/MMMM/yyyy hh:mm a');
-    final cat = homeController.categoriesList.value.data;
+    final cat = homeController.categories;
     if (homeController.newsData.value.to == -1) {
       return homeController.categories
           .map((data) => Center(
@@ -65,13 +66,13 @@ class _HomePageState extends State<HomePage> {
     } 
 
     else {
-      return homeController.categoriesList.value.data
-          .map((e) => ListView(
+      return homeController.categories
+          .map((item) {
+            List<Data> e = homeController.getData(item);
+            return ListView(
             shrinkWrap: true,
             children:
-            homeController
-                .getData(e.id)
-                .map((e) => ListTile(
+            e.map((e) => ListTile(
                 horizontalTitleGap: 20,
                 onTap: () {
                   Navigator.push(
@@ -108,7 +109,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                     )).toList(),
-          ))
+          );
+          })
           .toList();
     }
   }
@@ -117,7 +119,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Obx(
       () => SafeArea(
-        child: homeController.categoriesList.value == null
+        child: homeController.categoriesList.value.currentPage==-1
             ? Center(
                 child: CircularProgressIndicator(),
               )
