@@ -7,6 +7,9 @@ import 'package:newsapp/model/news_model.dart';
 import 'package:newsapp/services/api_manager.dart';
 
 class HomeController extends GetxController {
+
+  RxList<NewsModel> news =<NewsModel>[].obs;
+
   Rx<CategoriesList> categoriesList =
       CategoriesList(data: [], currentPage: -1).obs;
   Rx<NewsModel> newsData = NewsModel(
@@ -26,10 +29,9 @@ class HomeController extends GetxController {
       .obs;
 
   RxList<int> categories=<int>[].obs;
-  void getCatogoriesList() async {
+  Future<void>getCatogoriesList() async {
     categoriesList.value = (await ApiManager().getCategoryList())!;
-   await getNewsList();
-   categories.value=newsData.value.data.map((e) => e.categoryId).toSet().toList();
+  //  categories.value=newsData.value.data.map((e) => e.categoryId).toSet().toList();
   }
 
   String getCategoryName({required int categoryId}){
@@ -40,8 +42,8 @@ class HomeController extends GetxController {
     return newsData.value.data.where((element) => element.categoryId==categoryId).toList();
   }
 
-  Future<void> getNewsList() async {
-    newsData.value = (await ApiManager().getNews());
+  Future<void> getNewsList(String newsCategory) async {
+    newsData.value = (await ApiManager().getNews(newsCategory));
   }
 
   
@@ -49,6 +51,11 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCatogoriesList();
+    getCatogoriesList().then((value){
+      categoriesList.value.data.forEach((element)async {
+        NewsModel newsModel = await ApiManager().getNews(element.name);
+        news.add(newsModel);
+      });
+    });
   }
 }

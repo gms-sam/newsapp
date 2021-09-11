@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 
 class ApiManager {
   final String baseUrl = "https://newsmods.com/api";
-  Future<NewsModel> getNews() async {
-    var url = baseUrl + "/news/list";
+  Future<NewsModel> getNews(String newsCategory) async {
+    var url = baseUrl + "/$newsCategory/news";
     Uri uri = Uri.parse(url);
     NewsModel? newsModel;
     try {

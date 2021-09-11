@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,6 +48,9 @@ class _SignInState extends State<SignIn> {
                     if (input!.isEmpty) {
                       return "Please Enter a Email";
                     }
+                     if (!GetUtils.isEmail(input)){
+                      return "Email is not valid";
+                     }
                   },
                   onSaved: (input) => _email = input.toString(),
                   decoration: InputDecoration(

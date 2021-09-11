@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               )
             : DefaultTabController(
-                length: homeController.categoriesList.value.data.length,
+                length: homeController.categories.length,
                 child: Scaffold(
                   body: Container(
                    // height: MediaQuery.of(context).size.height,
@@ -156,12 +156,12 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.blueAccent),
                           unselectedLabelColor: Colors.grey,
                           indicatorSize: TabBarIndicatorSize.label,
-                          tabs: homeController.categoriesList.value.data
+                          tabs: homeController.categories
                               .map(
                                 (e) => Container(
                                   width: MediaQuery.of(context).size.width/4,
                                   child: Tab(
-                                    child: customTab(text: e.name),
+                                    child: customTab(text: homeController.getCategoryName(categoryId: e)),
                                   ),
                                 ),
                               )
