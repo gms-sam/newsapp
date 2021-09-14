@@ -36,7 +36,7 @@ class HomeController extends GetxController {
 
   String getCategoryName({required int categoryId}){
     return categoriesList.value.data.firstWhere((element) => element.id==categoryId).name;
-  }
+     }
   
   List<Data> getData(int categoryId) {
     return newsData.value.data.where((element) => element.categoryId==categoryId).toList();
@@ -48,13 +48,18 @@ class HomeController extends GetxController {
 
   
 
+  
+
   @override
   void onInit() {
     super.onInit();
-    getCatogoriesList().then((value){
+    getCatogoriesList().then((value)async{
+      for(int i=0;i<categoriesList.value.data.length;i++){
+      NewsModel newsModel = await ApiManager().getNews(categoriesList.value.data[i].name);
+      news.add(newsModel);
+      }
       categoriesList.value.data.forEach((element)async {
-        NewsModel newsModel = await ApiManager().getNews(element.name);
-        news.add(newsModel);
+        
       });
     });
   }
