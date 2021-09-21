@@ -1,14 +1,17 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:newsapp/model/categories.dart';
 import 'package:newsapp/model/news_model.dart';
+import 'package:newsapp/model/user_2.dart';
 import 'package:newsapp/services/api_manager.dart';
 
 class HomeController extends GetxController {
 
   RxList<NewsModel> news =<NewsModel>[].obs;
+  Rx<User> user = User(email: "",name: "",id:0,createdAt: "",updatedAt: "",emailVerifiedAt: "").obs;
 
   Rx<CategoriesList> categoriesList =
       CategoriesList(data: [], currentPage: -1).obs;
@@ -46,6 +49,17 @@ class HomeController extends GetxController {
     newsData.value = (await ApiManager().getNews(newsCategory));
   }
 
+  Future<User> getUserData() async {
+   String? userData = await FlutterSecureStorage().read(key: "user");
+   if(userData == null){
+     throw "error";
+   }
+   else{
+     User user = User.fromJson(userData);
+     this.user.value = user;
+     return user;
+   }
+  }
   
 
   
@@ -62,5 +76,6 @@ class HomeController extends GetxController {
         
       });
     });
+    getUserData();
   }
 }

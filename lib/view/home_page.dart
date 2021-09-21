@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:newsapp/controller/home_page.dart';
 import 'package:newsapp/model/news_model.dart';
+import 'package:newsapp/view/profile.dart';
+import 'package:newsapp/view/sign_in.dart';
 import 'news_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,32 +31,11 @@ class _HomePageState extends State<HomePage> {
           )),
     );
   }
-
-  String getCategoryName(int categoryId) {
-    switch (categoryId) {
-      case 1:
-        return "Technology";
-      case 2:
-        return "Bussiness";
-      case 3:
-        return "Entertainment";
-      case 4:
-        return "Genral";
-      case 5:
-        return "Health";
-      case 6:
-        return "Science";
-      case 7:
-        return "Sports";
-      default:
-        return "default";
-    }
-  }
-
+  FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
   final HomeController homeController = Get.put(HomeController());
 
   List<Widget> getWidgets() {
-    var outPutFormate = DateFormat('dd/MMMM/yyyy hh:mm a');
+    var outPutFormate = DateFormat('dd/MMMM/yyyy ');
     //var outPutFormate = DateFormat('dd/MMMM/yyyy hh:mm a');  add it instead of above date formate to get with time output.
     return [
       for (int i = 0; i < homeController.categoriesList.value.data.length; i++)
@@ -70,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NewsListDetails(dataList: e)));
+                                    NewsListDetails(dataList: e, i: i,)));
                       },
                       leading: Container(
                         height: 200,
@@ -92,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(getCategoryName(e.categoryId)),
+                            //  Text(getCategoryName(e.categoryId)),
                               Text(outPutFormate
                                   .format(DateTime.parse(
                                       DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
@@ -127,22 +109,81 @@ class _HomePageState extends State<HomePage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Browse",
-                          style: TextStyle(fontSize: 35, color: Colors.black),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "NewsMods",
+                              style: TextStyle(fontSize: 35, color: Colors.black),
+                            ),
+                            IconButton(onPressed: (){
+                              showModalBottomSheet(context: context, builder: (context){
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
+                                  ),
+                                  height: MediaQuery.of(context).size.height/4,
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                         leading: Icon(Icons.person),
+                                        title: Text("Name"),
+                                        subtitle: Text(homeController.user.value.name),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.email),
+                                        title: Text("Email"),
+                                        subtitle: Text(homeController.user.value.email),
+                                      ),
+                                      ListTile(
+                                        onTap: (){
+                                          flutterSecureStorage.delete(key: "login");
+                                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>SignIn()), (route) => false);
+                                        },
+                                        leading: Icon(Icons.logout),
+                                        title: Text("SignOut"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                              // Get.bottomSheet(
+                              //   Container(
+                              //     child: Column(
+                              //       children: [
+                              //         ListTile(
+                              //           leading: Icon(Icons.person),
+                              //           // title: Text("Name"),
+                              //           // subtitle: Text(homeController.user.value.name),
+                              //         ),
+                              //         ListTile(
+                              //           leading: Icon(Icons.email),
+                              //           // title: Text("Email"),
+                              //           // subtitle: Text(homeController.user.value.email),
+                              //         )
+                              //       ],
+                              //     ),
+                              //   )
+                              // );
+                            },
+                             icon: Icon(Icons.person))
+
+
+
+                          ],
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          "Discover things of this world",
+                          "Discover news in right way",
                           style: TextStyle(color: Colors.black),
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         Container(
-                          
                             child: TabBar(
                           isScrollable: true,
                           indicator: BoxDecoration(
@@ -153,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                           tabs: homeController.categoriesList.value.data
                               .map(
                                 (e) => Container(
-                                  width: MediaQuery.of(context).size.width / 4,
+                                  width: MediaQuery.of(context).size.width / 3,
                                   child: Tab(
                                     child: customTab(
                                         text: homeController.getCategoryName(
@@ -165,6 +206,7 @@ class _HomePageState extends State<HomePage> {
                         )),
                         Expanded(
                           child: Container(
+                            width: double.infinity,
                             margin: EdgeInsets.only(top: 20),
                             // height: MediaQuery.of(context).size.height,
                             child: TabBarView(children: getWidgets()),

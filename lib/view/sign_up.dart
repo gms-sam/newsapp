@@ -8,10 +8,17 @@ import 'package:newsapp/view/sign_in.dart';
 import 'package:http/http.dart'as http;
 import 'dashboard.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String _email = "", _userName = "",_password="",_confrmPassword="";
 
+  bool _secureText = true,_secureText1 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +32,9 @@ class SignUp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                  SizedBox(height: 30,),
-                Text("Welcome to Nuntium",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),),
+                Text("Welcome",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),),
                 SizedBox(height: 15,),
-                Text("Hello, I guess are new around here. You can start using the application after sign up.",style: TextStyle(fontSize: 18),),
+                Text("Discover news in right way",style: TextStyle(fontSize: 18),),
                 SizedBox(height:  50),
                 TextFormField(
                   validator: (input) {
@@ -67,6 +74,7 @@ class SignUp extends StatelessWidget {
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
+                  obscureText: _secureText,
                   validator: (input) {
                     if (input!.isEmpty) {
                       return "Please Enter Password";
@@ -75,6 +83,13 @@ class SignUp extends StatelessWidget {
                   onSaved: (input) => _password= input.toString(),
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(icon: Icon(_secureText?Icons.visibility_off:Icons.visibility),
+                    onPressed: (){
+                      setState(() {
+                      _secureText = !_secureText;
+                      });
+                    },
+                    ),
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -84,6 +99,7 @@ class SignUp extends StatelessWidget {
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
+                  obscureText: _secureText1,  
                   validator: (input) {
                     if (input!.isEmpty) {
                       return "Please Enter Confirm Password";
@@ -92,11 +108,19 @@ class SignUp extends StatelessWidget {
                   onSaved: (input) => _confrmPassword = input.toString(),
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(icon: Icon(_secureText1?Icons.visibility_off:Icons.visibility),
+                    onPressed: (){
+                      setState(() {
+                      _secureText1 = !_secureText1;
+                      });
+                    },
+                    ),
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
+                    
                     hintText: "Repeat Password"),
                 ),
                 SizedBox(height: 25,),
@@ -167,6 +191,7 @@ class SignUp extends StatelessWidget {
             content: Text(data.values.toList()[0][0])));
       }
   }
+
   void pageRoute(String token,BuildContext context)async{
     //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     //     await sharedPreferences.setString("login", token);

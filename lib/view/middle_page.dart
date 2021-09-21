@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:newsapp/view/home_page.dart';
 import 'package:newsapp/view/sign_in.dart';
 
 import 'dashboard.dart';
@@ -27,7 +28,7 @@ class _MiddlePageState extends State<MiddlePage> {
     FlutterSecureStorage flutterSecureStorage = await FlutterSecureStorage();
     String? val = await flutterSecureStorage.read(key: "login");
     if(val!=null){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>DashBoard()), (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
     }else{
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>SignIn()), (route) => false);
     }
@@ -37,7 +38,8 @@ class _MiddlePageState extends State<MiddlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Colors.white,
+      body: Center(child: CircularProgressIndicator(),),
     );
   }
 }

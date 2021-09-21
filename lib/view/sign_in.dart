@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:http/http.dart'as http;
 import 'package:newsapp/model/user.dart';
+import 'package:newsapp/model/user_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:newsapp/services/api_manager.dart';
@@ -25,6 +26,7 @@ class _SignInState extends State<SignIn> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _email = "", _password = "";
+  bool _secureText = true;
 
 
   @override
@@ -42,7 +44,7 @@ class _SignInState extends State<SignIn> {
                 SizedBox(height: 30,),
                 Text("Welcome Back",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),),
                 SizedBox(height: 15,),
-                Text("I am happy to see you again. You can continue when you left off by logging in",style: TextStyle(fontSize: 18),),
+                Text("Discover news in right way ",style: TextStyle(fontSize: 18),),
                 SizedBox(height:  50),
                 TextFormField(
                   validator: (input) {
@@ -63,6 +65,7 @@ class _SignInState extends State<SignIn> {
                       borderSide: BorderSide()
                     ),
                     hintText: "Enter Your Email"),
+                    
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
@@ -72,9 +75,16 @@ class _SignInState extends State<SignIn> {
                     }
                   },
                   onSaved: (input) => _password = input.toString(),
-                  obscureText: true,
+                  obscureText: _secureText,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(icon: Icon(_secureText?Icons.visibility_off:Icons.visibility),
+                    onPressed: (){
+                      setState(() {
+                        _secureText = !_secureText;
+                      });
+                    },
+                    ),
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -91,6 +101,7 @@ class _SignInState extends State<SignIn> {
                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
                    },
                    child: Text("Forgot Password?",style: TextStyle(fontSize: 16),))),
+                   SizedBox(height: 30,),
                 InkWell(
                   onTap: () {
                       final formSate = _formKey.currentState;
@@ -104,7 +115,7 @@ class _SignInState extends State<SignIn> {
                       }
                     },
                   child: Container(
-                    margin: EdgeInsets.only(top: 30),
+                   // margin: EdgeInsets.only(top: 30),
                     height: 60,
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -135,15 +146,15 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  Future<User?> login(BuildContext context)async{
+  Future<UserModel?> login(BuildContext context)async{
     if(_password.isNotEmpty && _email.isNotEmpty){
        var url = Uri.parse("https://newsmods.com/api/login");
         Map body = {"email": _email,"password": _password};
       var response = await http.post(url, body: body,headers: {"accept":"application/json"});
       if(response.statusCode == 201){
-        final body = jsonDecode(response.body);
-        pageRoute(body["token"],context,body["user"]["name"],body["user"]["email"]);
-        final User user = User.fromJson(response.body);
+       // final body = jsonDecode(response.body);
+        final UserModel user = UserModel.fromJson(response.body);
+       await pageRoute(context,user);
         return user;
       }else{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid User")));
@@ -153,14 +164,13 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  void pageRoute(String token,BuildContext context,String name,String email)async{
+  Future<void> pageRoute(BuildContext context,UserModel user)async{
     //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     //     await sharedPreferences.setString("login", token);
-
     FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
-    flutterSecureStorage.write(key: "login", value: token);
-    flutterSecureStorage.write(key: "email", value: email);
-    flutterSecureStorage.write(key: "name", value: name);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>DashBoard()), (route) => false);
+    
+   await flutterSecureStorage.write(key: "login", value: user.token);
+   await flutterSecureStorage.write(key: "user", value: user.user.toJson());
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
   }
 }

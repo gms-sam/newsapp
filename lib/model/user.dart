@@ -1,40 +1,27 @@
 import 'dart:convert';
 
-class User {
+import 'package:newsapp/model/user_2.dart';
+
+import 'user.dart';
+
+class UserModel {
   final User user;
   final String token;
-  User({
+  UserModel({
     required this.user,
     required this.token,
   });
 
-  User copyWith({
-    required User user,
-    required String token,
-  }) {
-    return User(
-      user: user,
-      token: token,
-    );
-  }
-
-  User merge(User model) {
-    return User(
-      user: model.user,
-      token: model.token,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
+   Map<String, dynamic> toMap() {
     return {
       'user': user.toMap(),
       'token': token,
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromMap(Map<String, dynamic> map) {
   
-    return User(
+    return UserModel(
       user: User.fromMap(map['user']),
       token: map['token'],
     );
@@ -42,16 +29,16 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'User(user: $user, token: $token)';
+  String toString() => 'UserModel(user: $user, token: $token)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
   
-    return o is User &&
+    return o is UserModel &&
       o.user == user &&
       o.token == token;
   }
