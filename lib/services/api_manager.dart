@@ -23,6 +23,25 @@ class ApiManager {
     }
   }
 
+
+  Future<NewsModel> getMoreNews(String url)async{
+      Uri uri = Uri.parse(url);
+    NewsModel? newsModel;
+    try {
+      final response =
+          await http.get(uri, headers: {"Accept": "application/json"});
+      if (response.statusCode == 200) {
+        //print(response.body);
+        newsModel = NewsModel.fromJson(response.body);
+        return newsModel;
+      } else {
+        throw "error";
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<CategoriesList?> getCategoryList() async {
     var url = baseUrl + "/category/list/";
     Uri uri = Uri.parse(url);

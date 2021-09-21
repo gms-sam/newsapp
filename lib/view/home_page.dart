@@ -43,8 +43,9 @@ class _HomePageState extends State<HomePage> {
           Center(child: CircularProgressIndicator())
         else
           ListView(
+            controller: homeController.scrollController[i],
             shrinkWrap: true,
-            children: homeController.news[i].data
+            children: homeController.newsList[i]
                 .map((e) => ListTile(
                       horizontalTitleGap: 20,
                       onTap: () {

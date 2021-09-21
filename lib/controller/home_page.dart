@@ -48,9 +48,11 @@ class HomeController extends GetxController {
   }
 
   void listner(int index)async{
-    if(scrollController[index].position.maxScrollExtent)
+    if(scrollController[index].position.pixels==scrollController[index].position.maxScrollExtent)
+    {
     news[index]=await ApiManager().getMoreNews(news[index].nextPageUrl);
     newsList[index].addAll(news[index].data);
+    }
   }
 
   String getCategoryName({required int categoryId}){
