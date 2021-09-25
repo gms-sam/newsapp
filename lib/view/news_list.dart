@@ -50,6 +50,9 @@ class NewsListDetails extends StatelessWidget {
           Container(
               child: Image.network(
             dataList.image,
+            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace){
+                                                  return Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png");
+                                                },
             fit: BoxFit.cover,
             height: MediaQuery.of(context).size.height * 0.4,
           )),
@@ -138,6 +141,9 @@ class NewsListDetails extends StatelessWidget {
                                                 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png")
                                             : Image.network(
                                                 e.image,
+                                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace){
+                                                  return Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png");
+                                                },
                                                 fit: BoxFit.cover,
                                               )),
                                   ),

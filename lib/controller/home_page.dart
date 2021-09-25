@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -10,7 +8,7 @@ import 'package:newsapp/services/api_manager.dart';
 
 class HomeController extends GetxController {
 
-  List<RxList<Data>> newsList=[<Data>[].obs];
+  RxList<RxList<Data>> newsList=<RxList<Data>>[].obs;
   List<ScrollController> scrollController=<ScrollController>[];
 
   RxList<NewsModel> news =<NewsModel>[].obs;
@@ -37,17 +35,17 @@ class HomeController extends GetxController {
   RxList<int> categories=<int>[].obs;
   Future<void>getCatogoriesList() async {
     categoriesList.value = (await ApiManager().getCategoryList())!;
-    newsList=List.generate(categoriesList.value.data.length, (index) => <Data>[].obs);
+    newsList=RxList.generate(categoriesList.value.data.length, (index) => <Data>[].obs);
     scrollController=List.generate(categoriesList.value.data.length, (index) => ScrollController());
     for(int i=0;i<scrollController.length;i++){
       scrollController[i].addListener(() {
-        listner(i);
+        listener(i);
       });
     }
   //  categories.value=newsData.value.data.map((e) => e.categoryId).toSet().toList();
   }
 
-  void listner(int index)async{
+  void listener(int index)async{
     if(scrollController[index].position.pixels==scrollController[index].position.maxScrollExtent)
     {
     news[index]=await ApiManager().getMoreNews(news[index].nextPageUrl);
@@ -89,6 +87,7 @@ class HomeController extends GetxController {
     getCatogoriesList().then((value)async{
       for(int i=0;i<categoriesList.value.data.length;i++){
       NewsModel newsModel = await ApiManager().getNews(categoriesList.value.data[i].name);
+      newsList[i].addAll(newsModel.data);
       news.add(newsModel);
       }
       categoriesList.value.data.forEach((element)async {

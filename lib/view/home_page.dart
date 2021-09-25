@@ -43,8 +43,9 @@ class _HomePageState extends State<HomePage> {
           Center(child: CircularProgressIndicator())
         else
           ListView(
-            controller: homeController.scrollController[i],
+          controller: homeController.scrollController[i],
             shrinkWrap: true,
+            // children: homeController.news[i].data
             children: homeController.newsList[i]
                 .map((e) => ListTile(
                       horizontalTitleGap: 20,
@@ -65,6 +66,9 @@ class _HomePageState extends State<HomePage> {
                                     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png")
                                 : Image.network(
                                     e.image,
+                                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace){
+                                                  return Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png");
+                                                },
                                     fit: BoxFit.cover,
                                   )),
                       ),
@@ -91,7 +95,6 @@ class _HomePageState extends State<HomePage> {
           )
     ];
   }
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -169,9 +172,6 @@ class _HomePageState extends State<HomePage> {
                               // );
                             },
                              icon: Icon(Icons.person))
-
-
-
                           ],
                         ),
                         SizedBox(
@@ -184,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 20,
                         ),
+                        
                         Container(
                             child: TabBar(
                           isScrollable: true,
