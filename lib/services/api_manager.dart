@@ -12,7 +12,6 @@ class ApiManager {
       final response =
           await http.get(uri, headers: {"Accept": "application/json"});
       if (response.statusCode == 200) {
-        //print(response.body);
         newsModel = NewsModel.fromJson(response.body);
         return newsModel;
       } else {
@@ -31,7 +30,6 @@ class ApiManager {
       final response =
           await http.get(uri, headers: {"Accept": "application/json"});
       if (response.statusCode == 200) {
-        //print(response.body);
         newsModel = NewsModel.fromJson(response.body);
         return newsModel;
       } else {
@@ -48,7 +46,6 @@ class ApiManager {
     try {
       final http.Response response = await http.get(uri,headers: {"Accept": "application/json"});
       if (response.statusCode == 200) {
-       // print(CategoriesList.fromJson(response.body));
         return CategoriesList.fromJson(response.body);
       }
       return null;

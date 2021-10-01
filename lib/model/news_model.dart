@@ -179,7 +179,11 @@ class Data {
   final int?cityId;
   final String createdAt;
   final String updatedAt;
+  final String? source;
+  final String? author;
   Data({
+    required this.source,
+    required this.author,
     required this.id,
     required this.heading,
     required this.slug,
@@ -192,51 +196,6 @@ class Data {
     required this.createdAt,
     required this.updatedAt,
   });
-
-  Data copyWith({
-    required int id,
-    required String heading,
-    required String slug,
-    required String excerpt,
-    required String content,
-    required String image,
-    required int userId,
-    required int categoryId,
-    required int cityId,
-    required String createdAt,
-    required String updatedAt,
-  }) {
-    return Data(
-      id: id,
-      heading: heading,
-      slug: slug,
-      excerpt: excerpt,
-      content: content,
-      image: image,
-      userId: userId,
-      categoryId: categoryId,
-      cityId: cityId,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    );
-  }
-
-  Data merge(Data model) {
-    return Data(
-      id: model.id,
-      heading: model.heading,
-      slug: model.slug,
-      excerpt: model.excerpt,
-      content: model.content,
-      image: model.image,
-      userId: model.userId,
-      categoryId: model.categoryId,
-      cityId: model.cityId,
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -250,6 +209,8 @@ class Data {
       'city_id': cityId,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'source': source,
+      'author': author
     };
   }
 
@@ -268,6 +229,8 @@ class Data {
       cityId: map['city_id']?.toInt(),
       createdAt: map['created_at'],
       updatedAt: map['updated_at'],
+      source: map['source'],
+      author: map['author'],
     );
   }
 
@@ -277,7 +240,7 @@ class Data {
 
   @override
   String toString() {
-    return 'Data(id: $id, heading: $heading, slug: $slug, excerpt: $excerpt, content: $content, image: $image, userId: $userId, categoryId: $categoryId, cityId: $cityId, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Data(id: $id, heading: $heading, slug: $slug, excerpt: $excerpt, content: $content, image: $image, userId: $userId, categoryId: $categoryId, cityId: $cityId, createdAt: $createdAt, updatedAt: $updatedAt,)';
   }
 
   @override

@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_utils/src/get_utils/get_utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart'as http;
 import 'package:newsapp/model/user.dart';
-import 'package:newsapp/model/user_2.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:newsapp/services/api_manager.dart';
-import 'package:newsapp/view/dashboard.dart';
 import 'package:newsapp/view/home_page.dart';
 
 import 'sign_up.dart';
@@ -38,13 +32,12 @@ class _SignInState extends State<SignIn> {
           child: Form(
             key: _formKey,
             child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 30,),
-                Text("Welcome Back",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),),
+                Text("Welcome Back",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),)),
                 SizedBox(height: 15,),
-                Text("Discover news in right way ",style: TextStyle(fontSize: 18),),
+                Text("Discover news in right way ",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 18)),),
                 SizedBox(height:  50),
                 TextFormField(
                   validator: (input) {
@@ -59,12 +52,11 @@ class _SignInState extends State<SignIn> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     fillColor: Colors.grey,
-                    //filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
-                    hintText: "Enter Your Email"),
+                    hintText: "Enter Your Email",hintStyle: GoogleFonts.dmSans()),
                     
                 ),
                 SizedBox(height: 25,),
@@ -90,7 +82,7 @@ class _SignInState extends State<SignIn> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
-                    hintText: "Enter Your password",
+                    hintText: "Enter Your password",hintStyle: GoogleFonts.dmSans(),
                   ),
                 ),
                SizedBox(height: 20),
@@ -98,9 +90,8 @@ class _SignInState extends State<SignIn> {
                  alignment: Alignment.centerRight ,
                  child: InkWell(
                    onTap: (){
-                     //Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
                    },
-                   child: Text("Forgot Password?",style: TextStyle(fontSize: 16),))),
+                   child: Text("Forgot Password?",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 16),)))),
                    SizedBox(height: 30,),
                 InkWell(
                   onTap: () {
@@ -108,10 +99,6 @@ class _SignInState extends State<SignIn> {
                       if (formSate!.validate()) {
                         formSate.save();
                         login(context);
-                        //apiManager.signIn(_email, _password);
-                       // callLoginApi();
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (context) => MainHomePage()));
                       }
                     },
                   child: Container(
@@ -122,19 +109,19 @@ class _SignInState extends State<SignIn> {
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.blueAccent
                     ),
-                      child: Center(child: Text("Login",style: TextStyle(color: Colors.white,fontSize: 20),))),
+                      child: Center(child: Text("Login",style: GoogleFonts.dmSans(textStyle: TextStyle(color: Colors.white,fontSize: 20)),))),
                 ),
                Padding(
                         padding: const EdgeInsets.only(top: 40),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don't have an account?",style: TextStyle(fontSize: 20),),
+                            Text("Don't have an account?",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 20),)),
                             InkWell(
                               onTap: (){
                                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignUp()));
                               },
-                              child: Text(" Sign Up",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600)))
+                              child: Text(" Sign Up",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.w600))))
                           ],
                         ),
                       )
@@ -165,8 +152,6 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<void> pageRoute(BuildContext context,UserModel user)async{
-    //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    //     await sharedPreferences.setString("login", token);
     FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
     
    await flutterSecureStorage.write(key: "login", value: user.token);

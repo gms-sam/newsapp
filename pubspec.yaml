@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^2.1.0
   http: ^0.13.3
   shared_preferences: ^2.0.7
   intl: ^0.17.0
@@ -66,18 +67,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: DMSans
-      fonts:
-        - asset: assets/fonts/DMSans-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/DMSans-MediumItalic.ttf
-          weight: 500
-        - asset: assets/fonts/DMSans-BoldItalic.ttf
-          weight: 600
-        - asset: assets/fonts/DMSans-Bold.ttf
-          weight: 700
-        - assets: assets/fonts/DMSans-Italic.ttf
-          weight: 500
+  # fonts:
+  #   - family: DMSans
+  #     fonts:
+  #       - asset: assets/fonts/DMSans-Regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/DMSans-MediumItalic.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/DMSans-BoldItalic.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/DMSans-Bold.ttf
+  #         weight: 700
+  #       - assets: assets/fonts/DMSans-Italic.ttf
+  #         weight: 500
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

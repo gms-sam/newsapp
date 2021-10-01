@@ -1,8 +1,5 @@
 import 'dart:convert';
-
 import 'package:newsapp/model/user_2.dart';
-
-import 'user.dart';
 
 class UserModel {
   final User user;

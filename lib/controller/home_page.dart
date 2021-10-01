@@ -16,21 +16,6 @@ class HomeController extends GetxController {
 
   Rx<CategoriesList> categoriesList =
       CategoriesList(data: [], currentPage: -1).obs;
-  // Rx<NewsModel> newsData = NewsModel(
-  //         path: "",
-  //         data: [],
-  //         to: -1,
-  //         total: 0,
-  //         firstPageUrl: "",
-  //         currentPage: 0,
-  //         from: 0,
-  //         lastPage: 0,
-  //         perPage: 0,
-  //         links: [],
-  //         lastPageUrl: "",
-  //         prevPageUrl: "",
-  //         nextPageUrl: '')
-  //     .obs;
 
   RxList<int> categories=<int>[].obs;
   Future<void>getCatogoriesList() async {
@@ -56,15 +41,6 @@ class HomeController extends GetxController {
   String getCategoryName({required int categoryId}){
     return categoriesList.value.data.firstWhere((element) => element.id==categoryId).name;
      }
-  
-  // List<Data> getData(int categoryId) {
-  //   return newsData.value.data.where((element) => element.categoryId==categoryId).toList();
-  // }
-
-  // Future<void> getNewsList(String newsCategory, int index) async {
-  //   newsData.value = (await ApiManager().getNews(newsCategory));
-  //   newsList[index].addAll(newsData.value.data);
-  // }
 
   Future<User> getUserData() async {
    String? userData = await FlutterSecureStorage().read(key: "user");

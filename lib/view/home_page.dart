@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:newsapp/controller/home_page.dart';
-import 'package:newsapp/model/news_model.dart';
-import 'package:newsapp/view/profile.dart';
 import 'package:newsapp/view/sign_in.dart';
 import 'news_list.dart';
 
@@ -21,13 +20,12 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(color: Colors.blueAccent)
-          //color: Colors.grey
           ),
       child: Align(
           alignment: Alignment.center,
           child: Text(
             text,
-            style: TextStyle(color: Colors.black),
+           style: GoogleFonts.dmSans(textStyle: TextStyle(color: Colors.black),),
           )),
     );
   }
@@ -36,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> getWidgets() {
     var outPutFormate = DateFormat('dd/MMMM/yyyy ');
-    //var outPutFormate = DateFormat('dd/MMMM/yyyy hh:mm a');  add it instead of above date formate to get with time output.
     return [
       for (int i = 0; i < homeController.categoriesList.value.data.length; i++)
         if (homeController.news.length <= i)
@@ -72,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                     fit: BoxFit.cover,
                                   )),
                       ),
-                      title: Text(e.heading),
+                      title: Text(e.heading,style: GoogleFonts.dmSans()),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -85,7 +82,9 @@ class _HomePageState extends State<HomePage> {
                                       DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
                                           .parse(e.updatedAt)
                                           .toString()))
-                                  .toString()),
+                                  .toString(),
+                                  style: GoogleFonts.dmSans(),
+                                  ),
                             ],
                           ),
                         ],
@@ -107,7 +106,6 @@ class _HomePageState extends State<HomePage> {
                 length: homeController.categoriesList.value.data.length,
                 child: Scaffold(
                   body: Container(
-                    // height: MediaQuery.of(context).size.height,
                     margin: EdgeInsets.only(top: 20, left: 15, right: 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -118,7 +116,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "NewsMods",
-                              style: TextStyle(fontSize: 35, color: Colors.black),
+                              style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 35, color: Colors.black))
+                              //TextStyle(fontSize: 35, color: Colors.black),
                             ),
                             IconButton(onPressed: (){
                               showModalBottomSheet(context: context, builder: (context){
@@ -131,13 +130,13 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       ListTile(
                                          leading: Icon(Icons.person),
-                                        title: Text("Name"),
-                                        subtitle: Text(homeController.user.value.name),
+                                        title: Text("Name",style: GoogleFonts.dmSans()),
+                                        subtitle: Text(homeController.user.value.name,style: GoogleFonts.dmSans()),
                                       ),
                                       ListTile(
                                         leading: Icon(Icons.email),
-                                        title: Text("Email"),
-                                        subtitle: Text(homeController.user.value.email),
+                                        title: Text("Email",style: GoogleFonts.dmSans()),
+                                        subtitle: Text(homeController.user.value.email,style: GoogleFonts.dmSans()),
                                       ),
                                       ListTile(
                                         onTap: (){
@@ -145,31 +144,12 @@ class _HomePageState extends State<HomePage> {
                                           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>SignIn()), (route) => false);
                                         },
                                         leading: Icon(Icons.logout),
-                                        title: Text("SignOut"),
+                                        title: Text("SignOut",style: GoogleFonts.dmSans()),
                                       ),
                                     ],
                                   ),
                                 );
                               });
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
-                              // Get.bottomSheet(
-                              //   Container(
-                              //     child: Column(
-                              //       children: [
-                              //         ListTile(
-                              //           leading: Icon(Icons.person),
-                              //           // title: Text("Name"),
-                              //           // subtitle: Text(homeController.user.value.name),
-                              //         ),
-                              //         ListTile(
-                              //           leading: Icon(Icons.email),
-                              //           // title: Text("Email"),
-                              //           // subtitle: Text(homeController.user.value.email),
-                              //         )
-                              //       ],
-                              //     ),
-                              //   )
-                              // );
                             },
                              icon: Icon(Icons.person))
                           ],
@@ -179,7 +159,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           "Discover news in right way",
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.dmSans()
+                          //style: TextStyle(color: Colors.black),
                         ),
                         SizedBox(
                           height: 20,
@@ -210,7 +191,6 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             width: double.infinity,
                             margin: EdgeInsets.only(top: 20),
-                            // height: MediaQuery.of(context).size.height,
                             child: TabBarView(children: getWidgets()),
                           ),
                         )

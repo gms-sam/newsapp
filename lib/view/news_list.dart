@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:newsapp/controller/home_page.dart';
 import 'package:newsapp/model/news_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,6 +36,8 @@ class NewsListDetails extends StatelessWidget {
   final int i;
   NewsListDetails({required this.dataList, required this.i});
 
+
+   var outPutFormate = DateFormat('dd/MMMM/yyyy ');
   final HomeController homeController = Get.put(HomeController());
 
   @override
@@ -56,20 +59,21 @@ class NewsListDetails extends StatelessWidget {
             fit: BoxFit.cover,
             height: MediaQuery.of(context).size.height * 0.4,
           )),
-          Positioned(
-            // top: MediaQuery.of(context).size.height * 0.23,
-            bottom: 600,
-            left: 20,
-            right: 10,
-            child: Text(
-              dataList.heading,
-              maxLines: 3,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 600,
+          //   left: 20,
+          //   right: 10,
+          //   child: Text(
+          //     dataList.heading,
+          //     maxLines: 3,
+          //       style: GoogleFonts.dmSans(
+          //         textStyle: TextStyle(
+          //         color: Colors.white,
+          //         fontSize: 25,
+          //         fontWeight: FontWeight.bold),
+          //       ) 
+          //   ),
+          // ),
           Positioned(
             bottom: 0,
             child: Container(
@@ -78,7 +82,7 @@ class NewsListDetails extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35),
                       topRight: Radius.circular(35))),
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding:
@@ -86,34 +90,81 @@ class NewsListDetails extends StatelessWidget {
                 child: SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
-                    // shrinkWrap: true,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      //Text(dataList.),
                       Text(
-                        "Description",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              dataList.heading,
+              //maxLines: 3,
+                style: GoogleFonts.dmSans(
+                  textStyle: TextStyle(
+                  //color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+                ) 
+            ),
+            
+            Row(children: [
+              Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
+                 color: Colors.blueAccent,
+                ),
+               
+                margin: EdgeInsets.only(right: 10,top: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                child: Text(getCategoryName(dataList.categoryId))),
+              Text("Published on : ${outPutFormate
+                                  .format(DateTime.parse(
+                                      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
+                                          .parse(dataList.updatedAt)
+                                          .toString()))
+                                }"
+                                  ),
+            Text("At  ${
+                      DateFormat.Hms().format(DateTime.parse(dataList.updatedAt))
+                                  }"
+                                  ),
+              
+            ],),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: dataList.author!=null?Text("Auther : ${dataList.author.toString()}"):Text("Auther : None"),
+            ),
+            SizedBox(height:10),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          "Description",
+                           style: GoogleFonts.dmSans(textStyle: TextStyle(color: Colors.blueAccent,fontSize: 20, fontWeight: FontWeight.bold,),)
+                        ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
                         dataList.content,
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 18)),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: InkWell(
-                            onTap: () {
-                              _launchUrl(dataList.slug);
+                            child: TextButton(
+                              onPressed: () {
+                              if(dataList.source!=null){
+                                _launchUrl(dataList.source.toString());
+                              }
+                              else{
+                                _launchUrl("www.google.com");
+                              }
                             },
-                            child: Text(
-                              "See More",
-                              style: TextStyle(color: Colors.blueAccent),
-                            )),
+                              child: Text("See More",
+                              style: GoogleFonts.dmSans(textStyle: TextStyle(color: Colors.white)),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent)
+                              )
+                            )
                       ),
                       ListView(
                         physics: NeverScrollableScrollPhysics(),
@@ -122,7 +173,7 @@ class NewsListDetails extends StatelessWidget {
                             .map((e) => ListTile(
                                   horizontalTitleGap: 20,
                                   onTap: () {
-                                    Navigator.push(
+                                    Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => NewsListDetails(
@@ -147,25 +198,8 @@ class NewsListDetails extends StatelessWidget {
                                                 fit: BoxFit.cover,
                                               )),
                                   ),
-                                  title: Text(e.heading),
-                                  subtitle: Text(getCategoryName(e.categoryId)),
-                                  // subtitle: Column(
-                                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                                  //   children: [
-                                  //     // Row(
-                                  //     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  //     //   children: [
-                                  //     //     Text(getCategoryName(e.categoryId)),
-                                  //     //     Text(outPutFormate
-                                  //     //         .format(DateTime.parse(
-                                  //     //             DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
-                                  //     //                 .parse(e.updatedAt)
-                                  //     //                 .toString()))
-                                  //     //         .toString()),
-                                  //     //   ],
-                                  //     // ),
-                                  //   ],
-                                  // ),
+                                  title: Text(e.heading,style: GoogleFonts.dmSans(),),
+                                  subtitle: Text(getCategoryName(e.categoryId),style: GoogleFonts.dmSans()),
                                 ))
                             .toList(),
                       )
@@ -181,7 +215,6 @@ class NewsListDetails extends StatelessWidget {
   }
 
   _launchUrl(String url) async {
-    const url = "https://www.google.com/";
     launch(url);
   }
 }

@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_utils/src/get_utils/get_utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapp/view/sign_in.dart';
 import 'package:http/http.dart'as http;
-import 'dashboard.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -32,9 +29,9 @@ class _SignUpState extends State<SignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                  SizedBox(height: 30,),
-                Text("Welcome",style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),),
+                Text("Welcome",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 35,fontWeight: FontWeight.w500),)),
                 SizedBox(height: 15,),
-                Text("Discover news in right way",style: TextStyle(fontSize: 18),),
+                Text("Discover news in right way",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 18),)),
                 SizedBox(height:  50),
                 TextFormField(
                   validator: (input) {
@@ -50,7 +47,7 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
-                    hintText: "Username"),
+                    hintText: "Username",hintStyle: GoogleFonts.dmSans()),
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
@@ -70,7 +67,7 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
-                    hintText: "Email Address"),
+                    hintText: "Email Address",hintStyle: GoogleFonts.dmSans()),
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
@@ -95,7 +92,7 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide()
                     ),
-                    hintText: "Password"),
+                    hintText: "Password",hintStyle: GoogleFonts.dmSans()),
                 ),
                 SizedBox(height: 25,),
                 TextFormField(
@@ -121,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                       borderSide: BorderSide()
                     ),
                     
-                    hintText: "Repeat Password"),
+                    hintText: "Repeat Password",hintStyle: GoogleFonts.dmSans()),
                 ),
                 SizedBox(height: 25,),
                 InkWell(
@@ -130,8 +127,6 @@ class _SignUpState extends State<SignUp> {
                       if (formSate!.validate()) {
                         formSate.save();
                         registerUser(context);
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (context) => SignIn()));
                       }
                     },
                   child: Container(
@@ -142,18 +137,18 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.blueAccent
                     ),
-                      child: Center(child: Text("Sign Up",style: TextStyle(color: Colors.white,fontSize: 20),))),
+                      child: Center(child: Text("Sign Up",style: GoogleFonts.dmSans(textStyle: TextStyle(color: Colors.white,fontSize: 20),)))),
                 ),
                 SizedBox(height: 40,),
                 Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have an account?",style: TextStyle(fontSize: 20),),
+                            Text("Already have an account?",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 20)),),
                             InkWell(
                               onTap: (){
                                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignIn()));
                               },
-                              child: Text(" Sign In",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600)))
+                              child: Text(" Sign In",style: GoogleFonts.dmSans(textStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.w600))))
                           ],
                         ),
               ],
@@ -193,11 +188,6 @@ class _SignUpState extends State<SignUp> {
   }
 
   void pageRoute(String token,BuildContext context)async{
-    //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    //     await sharedPreferences.setString("login", token);
-
-    // FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
-    // flutterSecureStorage.write(key: "login", value: token);
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>SignIn()), (route) => false);
   }
 }
