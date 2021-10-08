@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                 length: homeController.categoriesList.value.data.length,
                 child: Scaffold(
                   body: Container(
-                    margin: EdgeInsets.only(top: 20, left: 15, right: 10),
+                            margin: EdgeInsets.only(top: 20, left: 15, right: 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
